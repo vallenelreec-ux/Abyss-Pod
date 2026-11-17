@@ -8,6 +8,13 @@ const DIG_RANGE := 2.5
 const HITS_PER_WATER_TICK := 5
 const WATER_COST_PER_TICK := 1.0
 const SWING_COOLDOWN := 0.45
+## الغنيمة عند كسر الجدار حسب نوعه (الفراغ لا يعطي شيئاً) — جسر اختبار للمرحلة 3.
+const DROP_BY_HINT := {
+	0: "ore_rock",
+	1: "ore_metal",
+	2: "",
+	3: "water_sample",
+}
 
 var _hits_since_water_tick := 0
 
@@ -36,3 +43,7 @@ func swing() -> void:
 			player.use_water(WATER_COST_PER_TICK)
 		if "hp" in target:
 			wall_hit.emit(target.hp, target.max_hp)
+			if target.hp <= 0.0 and "hint" in target:
+				var drop: String = DROP_BY_HINT.get(target.hint, "")
+				if not drop.is_empty():
+					player.inventory.add_item(drop)

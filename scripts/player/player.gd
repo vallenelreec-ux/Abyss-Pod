@@ -18,8 +18,13 @@ var spawn_point := Vector3.ZERO
 ## آخر اتجاه حركة أفقي، يستخدمه نظام الحفر لتحديد الجدار المستهدف.
 var last_move_dir := Vector3(0, 0, -1)
 
+@onready var inventory: Node = $Inventory
+
 func _ready() -> void:
 	spawn_point = global_position
+	# التجهيز الابتدائي حسب GDD: فأس خشبي وقنينة ماء
+	inventory.add_item("axe_wood")
+	inventory.add_item("water_bottle")
 	health_changed.emit(health, MAX_HEALTH)
 	water_changed.emit(water, MAX_WATER)
 

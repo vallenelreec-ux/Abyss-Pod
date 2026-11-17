@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/digging/digging.gd" id="2_digging"]
+[ext_resource type="Script" path="res://scripts/systems/inventory.gd" id="3_inventory"]
 
 [sub_resource type="CapsuleShape3D" id="capsule"]
 radius = 0.35
@@ -42,3 +43,6 @@ script = ExtResource("2_digging")
 
 [node name="SwingTimer" type="Timer" parent="Digging"]
 one_shot = true
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_inventory")
