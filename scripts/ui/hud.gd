@@ -1,6 +1,11 @@
 extends CanvasLayer
+class_name GameHUD
 ## واجهة اللعب: الصحة، الماء، الحقيبة (16 خانة)، مؤشر التصويب، وعمق الطبقة.
 
+signal paid_revive_selected
+signal free_return_selected
+
+const DEATH_CHOICE_SECONDS := 30.0
 const SLOT_SIZE := 52.0
 const SLOT_TEXT_COLOR := Color(0.94, 0.91, 0.82, 1.0)
 
@@ -10,13 +15,20 @@ const SLOT_TEXT_COLOR := Color(0.94, 0.91, 0.82, 1.0)
 @onready var wall_label: Label = $Root/WallInfo
 @onready var message_label: Label = $Root/Message
 @onready var inventory_grid: GridContainer = $Root/InventoryPanel/Grid
+@onready var death_overlay: ColorRect = $Root/DeathOverlay
+@onready var death_countdown_label: Label = $Root/DeathOverlay/DeathMenu/DeathContent/DeathCountdown
+@onready var paid_revive_button: Button = $Root/DeathOverlay/DeathMenu/DeathContent/PaidReviveButton
+@onready var free_return_button: Button = $Root/DeathOverlay/DeathMenu/DeathContent/FreeReturnButton
 
-var _player: CharacterBody3D
+var _player: PlayerCharacter
 var _slot_labels: Array = []
+var _death_choice_remaining := 0.0
 
 func _ready() -> void:
 	_player = get_parent().get_node("Player")
 	_build_inventory_grid()
+	paid_revive_button.pressed.connect(_on_paid_revive_pressed)
+	free_return_button.pressed.connect(_on_free_return_pressed)
 
 func _build_inventory_grid() -> void:
 	for i in _player.inventory.SLOT_COUNT:
@@ -52,6 +64,11 @@ func _build_inventory_grid() -> void:
 func _process(_delta: float) -> void:
 	var depth := maxf(0.0, -_player.global_position.y)
 	depth_label.text = "الطبقة %d — العمق %.0f م" % [1 + int(depth / 10.0), depth]
+	if _death_choice_remaining > 0.0:
+		_death_choice_remaining = maxf(_death_choice_remaining - _delta, 0.0)
+		death_countdown_label.text = "اختر طريقة العودة خلال %d ثانية" % ceili(_death_choice_remaining)
+		if _death_choice_remaining <= 0.0:
+			_on_free_return_pressed()
 
 func on_health_changed(value: float, max_value: float) -> void:
 	health_bar.max_value = max_value
@@ -69,7 +86,27 @@ func on_wall_hit(hp: float, max_hp: float) -> void:
 	wall_label.text = "حالة الجدار: %d / %d" % [int(maxf(hp, 0.0)), int(max_hp)]
 
 func on_player_died() -> void:
-	_show_message("لقد مت! عدت إلى الغرفة الآمنة", 3.0)
+	_death_choice_remaining = DEATH_CHOICE_SECONDS
+	death_overlay.visible = true
+	death_countdown_label.text = "اختر طريقة العودة خلال %d ثانية" % int(DEATH_CHOICE_SECONDS)
+
+func on_player_revived() -> void:
+	_death_choice_remaining = 0.0
+	death_overlay.visible = false
+
+func _on_paid_revive_pressed() -> void:
+	if _death_choice_remaining <= 0.0:
+		return
+	_death_choice_remaining = 0.0
+	death_overlay.visible = false
+	paid_revive_selected.emit()
+
+func _on_free_return_pressed() -> void:
+	if not death_overlay.visible:
+		return
+	_death_choice_remaining = 0.0
+	death_overlay.visible = false
+	free_return_selected.emit()
 
 ## يعرض محتوى الحقيبة: اسم العنصر في كل خانة، والخانات الفارغة بلا نص.
 func update_inventory(items: Array) -> void:

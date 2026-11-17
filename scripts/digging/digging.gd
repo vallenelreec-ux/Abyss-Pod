@@ -31,6 +31,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		swing()
 
 func swing() -> void:
+	if player.has_method("can_attack") and not bool(player.call("can_attack")):
+		return
 	swing_timer.start(SWING_COOLDOWN)
 	if not ray.is_colliding():
 		return

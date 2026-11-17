@@ -8,6 +8,7 @@ const SLOT_COUNT := 16
 const SAFE_SLOTS := [14, 15]
 
 var items: Array = []
+var equipped_item_ids: Array[String] = []
 
 func _ready() -> void:
 	items.resize(SLOT_COUNT)
@@ -44,6 +45,21 @@ func remove_item(item_id: String) -> bool:
 
 func has_item(item_id: String) -> bool:
 	return items.has(item_id)
+
+func equip_item(item_id: String) -> bool:
+	if not has_item(item_id):
+		return false
+	if not equipped_item_ids.has(item_id):
+		equipped_item_ids.append(item_id)
+	return true
+
+## عند Free Return تُفقد الغنائم العادية، وتبقى الأدوات المجهزة والخانات الآمنة.
+func apply_free_return_loss() -> void:
+	for i in range(SLOT_COUNT):
+		if items[i].is_empty() or is_safe_slot(i) or equipped_item_ids.has(items[i]):
+			continue
+		items[i] = ""
+	changed.emit(items)
 
 func is_full() -> bool:
 	return not items.has("")

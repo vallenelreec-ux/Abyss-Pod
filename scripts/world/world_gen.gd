@@ -11,6 +11,7 @@ const CARDINAL_DIRECTIONS: Array[Vector2i] = [
 ]
 
 @export var world_seed: int = 0
+@export var zone_entrance_cell := Vector2i(0, 1)
 
 var _rng := RandomNumberGenerator.new()
 var _open_cells: Dictionary = {}
@@ -28,9 +29,13 @@ func _ready() -> void:
 	_floor_material.roughness = 1.0
 	_open_cells[Vector2i.ZERO] = true
 	_add_floor_tile(Vector2i.ZERO)
+	_open_cells[zone_entrance_cell] = true
+	_add_floor_tile(zone_entrance_cell)
 
-	for direction in CARDINAL_DIRECTIONS:
-		_spawn_wall(direction)
+	for open_cell_value in _open_cells.keys():
+		var open_cell: Vector2i = open_cell_value
+		for direction in CARDINAL_DIRECTIONS:
+			_spawn_wall(open_cell + direction)
 
 
 func _spawn_wall(cell: Vector2i) -> void:
