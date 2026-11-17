@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/pod.gd" id="1_pod"]
+
+[sub_resource type="StandardMaterial3D" id="ceiling_mat"]
+albedo_color = Color(0.25, 0.22, 0.2, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="wood_mat"]
+albedo_color = Color(0.45, 0.3, 0.18, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="metal_mat"]
+albedo_color = Color(0.55, 0.58, 0.62, 1)
+metallic = 0.8
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="water_mat"]
+albedo_color = Color(0.2, 0.5, 0.9, 1)
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="table_mat"]
+albedo_color = Color(0.5, 0.42, 0.3, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderShape3D" id="tank_shape"]
+radius = 0.7
+height = 1.6
+
+[node name="Pod" type="Node3D"]
+script = ExtResource("1_pod")
+
+[node name="Ceiling" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+size = Vector3(2.4, 0.2, 2.4)
+material = SubResource("ceiling_mat")
+
+[node name="StorageBox" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.2, -0.65)
+size = Vector3(0.6, 0.4, 0.45)
+material = SubResource("wood_mat")
+
+[node name="CraftingTable" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.4, -0.65)
+size = Vector3(0.7, 0.8, 0.7)
+material = SubResource("table_mat")
+
+[node name="Door" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.96)
+size = Vector3(0.9, 1.9, 0.08)
+material = SubResource("metal_mat")
+
+[node name="WaterTank" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0, 0.65)
+
+[node name="TankMesh" type="CSGCylinder3D" parent="WaterTank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+radius = 0.25
+height = 0.5
+material = SubResource("water_mat")
+
+[node name="Area3D" type="Area3D" parent="WaterTank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterTank/Area3D"]
+shape = SubResource("tank_shape")
