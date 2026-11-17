@@ -25,6 +25,7 @@ script = ExtResource("1_main")
 environment = SubResource("env")
 
 [node name="Floor" type="CSGBox3D" parent="."]
+use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 size = Vector3(60, 0.2, 60)
 material = SubResource("floor_mat")
