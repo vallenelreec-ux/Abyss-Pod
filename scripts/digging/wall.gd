@@ -1,3 +1,4 @@
+class_name DiggableWall
 extends StaticBody3D
 ## جدار قابل للتدمير. صوت الضربة يكشف ما خلفه: صخر، معدن، فراغ، أو ماء.
 
