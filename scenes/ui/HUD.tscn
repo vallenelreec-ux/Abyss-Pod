@@ -90,3 +90,24 @@ theme_override_colors/font_color = Color(1, 0.35, 0.3, 1)
 theme_override_font_sizes/font_size = 20
 text = ""
 horizontal_alignment = 1
+
+[node name="InventoryPanel" type="VBoxContainer" parent="Root"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -160.0
+offset_right = 440.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme_override_constants/separation = 4
+
+[node name="InvLabel" type="Label" parent="Root/InventoryPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "الحقيبة — الخانتان المضيئتان آمنتان"
+
+[node name="Grid" type="GridContainer" parent="Root/InventoryPanel"]
+layout_mode = 2
+columns = 8
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4

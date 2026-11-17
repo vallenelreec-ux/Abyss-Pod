@@ -37,9 +37,10 @@ for m in re.finditer(r'"res://([^"]+)"', pg):
 # 5) مسارات العقد في السكربتات مقابل العقد في المشاهد المرتبطة
 node_checks = {
     "scripts/digging/digging.gd": ("scenes/player/Player.tscn", ["DigRay", "SwingTimer"]),
+    "scripts/player/player.gd": ("scenes/player/Player.tscn", ["Inventory"]),
     "scripts/player/isometric_camera.gd": ("scenes/world/Main.tscn", ["Camera3D"]),
     "scripts/world/pod.gd": ("scenes/pod/Pod.tscn", ["WaterTank/Area3D"]),
-    "scripts/ui/hud.gd": ("scenes/ui/HUD.tscn", ["Root/TopLeft/HealthBar", "Root/TopLeft/WaterBar", "Root/DepthLabel", "Root/WallInfo", "Root/Message"]),
+    "scripts/ui/hud.gd": ("scenes/ui/HUD.tscn", ["Root/TopLeft/HealthBar", "Root/TopLeft/WaterBar", "Root/DepthLabel", "Root/WallInfo", "Root/Message", "Root/InventoryPanel/Grid"]),
     "scripts/world/main.gd": ("scenes/world/Main.tscn", ["Player", "HUD", "Player/Digging"]),
 }
 for gd, (scene, nodes) in node_checks.items():
