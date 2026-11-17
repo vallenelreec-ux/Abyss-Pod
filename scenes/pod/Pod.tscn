@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" path="res://scripts/pod.gd" id="1_pod"]
+[ext_resource type="Script" path="res://scripts/world/pod.gd" id="1_pod"]
 
 [sub_resource type="StandardMaterial3D" id="ceiling_mat"]
 albedo_color = Color(0.25, 0.22, 0.2, 1)
